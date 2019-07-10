@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    .cssCenter {
+        text-align: center
+    }
+</style>
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket Page</title>
+</head>
+<body>
+
+<pre class="cssCenter" id="title"></pre>
+<!-- the messages will be shown here -->
+<p class="cssCenter" id="output"></p>
+<!-- import the iris client-side library for browser-->
+<script src="/iris-ws.js"></script>
+
+<script>
+    let scheme = document.location.protocol === "https:" ? "wss" : "ws";
+    let port = document.location.port ? (":" + document.location.port) : "";
+    // see app.Get("/echo", ws.Handler()) on main.go
+    let wsURL = scheme + "://" + document.location.hostname + port + "/lifegamews";
+
+    let title = document.getElementById("title");
+    let output = document.getElementById("output");
+
+    // Ws comes from the auto-served '/iris-ws.js'
+    let socket = new Ws(wsURL);
+
+    // read events from the server
+    socket.On("cnt", function (msg) {
+        title.innerHTML = "<h1>Current Generation: " + msg + "</h1>"
+    });
+
+    socket.On("chessBoard", function (msg) {
+        output.innerText = msg
+    });
+
+</script>
+</body>
+</html>

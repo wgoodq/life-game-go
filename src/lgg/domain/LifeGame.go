@@ -67,7 +67,7 @@ func (lg *LifeGame) writeResponse() (int, []string) {
 			}
 		}
 
-		cells = append(cells, "<br>")
+		cells = append(cells, "\n")
 	}
 
 	return lg.cnt, cells

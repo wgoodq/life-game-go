@@ -9,7 +9,7 @@
 
 <p style="text-align:center">
     {{range .chessboard}}
-        {{if eq "<br>" . }}
+        {{if eq "\n" . }}
             <br>
         {{else}}
             {{.}}
