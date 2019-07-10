@@ -3,7 +3,6 @@ package domain
 import (
 	"log"
 	"math/rand"
-	"strings"
 	"sync"
 	"time"
 )
@@ -11,7 +10,7 @@ import (
 const BoardSize = 7
 
 type LifeGameService interface {
-	RunGame() (int, string)
+	RunGame() (int, []string)
 }
 
 type LifeGame struct {
@@ -21,7 +20,7 @@ type LifeGame struct {
 	newBoard [BoardSize][BoardSize]int
 }
 
-func (lg *LifeGame) RunGame() (int, string) {
+func (lg *LifeGame) RunGame() (int, []string) {
 	lg.mu.Lock()
 	defer lg.mu.Unlock()
 
@@ -52,7 +51,7 @@ func (lg *LifeGame) initLifeCells() {
 	log.Printf("init board: %v", lg.board)
 }
 
-func (lg *LifeGame) writeResponse() (int, string) {
+func (lg *LifeGame) writeResponse() (int, []string) {
 	var cells []string
 
 	for _, line := range lg.board {
@@ -71,7 +70,7 @@ func (lg *LifeGame) writeResponse() (int, string) {
 		cells = append(cells, "<br>")
 	}
 
-	return lg.cnt, strings.Join(cells, "")
+	return lg.cnt, cells
 }
 
 func (lg *LifeGame) evolution() {

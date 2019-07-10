@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/hero"
 	"lgg/domain"
@@ -9,21 +8,31 @@ import (
 
 func main() {
 	app := iris.New()
+	html := iris.HTML("./templates", ".html")
+	html.Reload(true)
+	app.RegisterView(html)
 
 	app.Get("/", note)
 
 	hero.Register(new(domain.LifeGame))
 	app.Get("/lifegame", hero.Handler(lifeGame))
 
-	_ = app.Run(iris.Addr(":8080"), iris.WithoutServerError(iris.ErrServerClosed))
+	app.Run(iris.Addr(":8080"))
 }
 
 func note(ctx iris.Context) {
-	_, _ = ctx.HTML("<h1>Life Game</h1>")
-	_, _ = ctx.Writef("<a href='%s'>Start Game</a>", "http://localhost:8080/lifegame")
+	ctx.ViewData("msg", "Life Game")
+	ctx.View("index.html")
 }
 
-func lifeGame(service domain.LifeGameService) string {
-	cnt, cellsString := service.RunGame()
-	return fmt.Sprintf("<h1 style=\"text-align:center\">Current Generation: %v</h1><br><p style=\"text-align:center\">%v</p>", cnt, cellsString)
+func lifeGame(service domain.LifeGameService) hero.View {
+	cnt, chessboard := service.RunGame()
+
+	return hero.View{
+		Name: "lifegame.html",
+		Data: map[string]interface{}{
+			"cnt":        cnt,
+			"chessboard": chessboard,
+		},
+	}
 }

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Life Game</title>
+</head>
+<body>
+<h1 style="text-align:center">Current Generation: {{.cnt}}</h1>
+
+<p style="text-align:center">
+    {{range .chessboard}}
+        {{if eq "<br>" . }}
+            <br>
+        {{else}}
+            {{.}}
+        {{end}}
+    {{end}}
+</p>
+</body>
+</html>
